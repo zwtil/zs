@@ -73,7 +73,7 @@ def main():
 
     # Print repository information
     for repo in repos:
-        if not repo:
+        if not custom_match(repo):
             continue
 
         output.append({
