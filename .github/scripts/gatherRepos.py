@@ -13,6 +13,9 @@ def custom_match(repo):
     if repo["archived"]:
         return False
 
+    if not repo["language"] == "Python":
+        return False
+
     return True
 
 def get_repos(api_url):
