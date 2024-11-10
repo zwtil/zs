@@ -82,7 +82,7 @@ def main():
         }
         )
     
-    with open("REPOS.json", "w") as f:
+    with open(".github/data/REPOS.json", "w") as f:
         json.dump(output, f, indent=4)
 
 if __name__ == "__main__":
