@@ -38,18 +38,25 @@ def main():
         sys.exit(1)
     
     api_url = sys.argv[1]
-    
+    print(api_url)
+
+    return
     repos = get_repos(api_url)
     
+    output = []
+
     # Print repository information
     for repo in repos:
         if repo:
             continue
 
-        print(f"Name: {repo['name']}")
-        print(f"URL: {repo['html_url']}")
-        print(f"Description: {repo['description']}")
-        print("---")
-
+        output.append({
+            "name": repo['name'],
+            "url": repo['html_url'],
+            "description": repo['description'],
+            "language": repo['language'],
+        }
+        )
+    
 if __name__ == "__main__":
     main()
