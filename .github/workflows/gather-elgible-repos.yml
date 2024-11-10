@@ -49,12 +49,11 @@ jobs:
                     CHECKSUM2=""
                   fi
 
-            - name: Kill job if no changes
-              run: |
-                if [ "$CHECKSUM" = "$CHECKSUM2" ]; then
-                  echo "No changes detected. Exiting..."
-                  exit 0                
-                fi
+                  if [ "$CHECKSUM" = "$CHECKSUM2" ]; then
+                    echo "No changes detected. Exiting..."
+                    exit 0                
+                  fi
+                
             - name: Commit and push changes
               run: |
                 git config --global user.name "GitHub Actions"
