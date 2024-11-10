@@ -8,12 +8,26 @@ def custom_match(repo):
     
     if repo["name"].startswith("zuu"):
         return False
+    
+    if repo["name"] == "zs":
+        return False
 
     # if archived
     if repo["archived"]:
         return False
 
     if not repo["language"] == "Python":
+        return False
+
+    #query contents 
+    contents_url = repo["contents_url"].replace("{+path}", "CLICK")
+    response = requests.get(contents_url)
+    if response.status_code != 200:
+        print(f"Error fetching contents: {response.status_code}")
+        return False
+
+    contents = response.json()
+    if contents["status"] == "404":
         return False
 
     return True
@@ -65,8 +79,6 @@ def main():
         output.append({
             "name": repo['name'],
             "url": repo['html_url'],
-            "description": repo['description'],
-            "language": repo['language'],
         }
         )
     
