@@ -29,9 +29,9 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   if [ -f "REPOS.json" ]; then
-                    CHECKSUM=$(openssl dgst -sha256 REPOS.json | cut -d ' ' -f2)
+                    CHECKSUM=$(sha256sum REPOS.json)
                     echo "REPOS.json checksum: $CHECKSUM"                  
-                  else:
+                  else
                     CHECKSUM=""
                   fi
 
@@ -43,9 +43,9 @@ jobs:
                   python .github/scripts/gatherRepos.py "$REPO_URL"
 
                   if [ -f "REPOS.json" ]; then
-                    CHECKSUM2=$(openssl dgst -sha256 REPOS.json | cut -d ' ' -f2)
+                    CHECKSUM2=$(sha256sum REPOS.json)
                     echo "REPOS.json checksum: $CHECKSUM"                  
-                  else:
+                  else
                     CHECKSUM2=""
                   fi
 
@@ -53,7 +53,7 @@ jobs:
                     echo "No changes detected. Exiting..."
                     exit 0                
                   fi
-            
+                
             - name: Commit and push changes
               run: |
                 git config --global user.name "GitHub Actions"
