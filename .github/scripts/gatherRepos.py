@@ -1,12 +1,16 @@
+import json
 import requests
 import sys
-#import json
 
 def custom_match(repo):
     if repo["visibility"] != "public":
         return False
     
     if repo["name"].startswith("zuu"):
+        return False
+
+    # if archived
+    if repo["archived"]:
         return False
 
     return True
@@ -63,7 +67,8 @@ def main():
         }
         )
     
-    print(output)
+    with open("REPOS.json", "w") as f:
+        json.dump(output, f, indent=4)
 
 if __name__ == "__main__":
     main()
