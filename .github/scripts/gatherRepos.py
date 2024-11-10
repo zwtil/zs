@@ -40,7 +40,6 @@ def main():
     api_url = sys.argv[1]
     print(api_url)
 
-    return
     repos = get_repos(api_url)
     
     output = []
