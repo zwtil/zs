@@ -11,12 +11,6 @@ jobs:
     gather-repos:
         runs-on: ubuntu-latest
         steps:
-            - name: Install sha256sum
-              run: |
-                    sudo apt-get update
-                    sudo apt-get install -y coreutils
-            
-
             - uses: actions/checkout@v3
 
             - name: Set up Python
@@ -35,7 +29,7 @@ jobs:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   if [ -f "REPOS.json" ]; then
-                    CHECKSUM=$(sha256sum REPOS.json)
+                    CHECKSUM=$(openssl dgst -sha256 REPOS.json | cut -d ' ' -f2)
                     echo "REPOS.json checksum: $CHECKSUM"                  
                   else:
                     CHECKSUM=""
@@ -49,7 +43,7 @@ jobs:
                   python .github/scripts/gatherRepos.py "$REPO_URL"
 
                   if [ -f "REPOS.json" ]; then
-                    CHECKSUM2=$(sha256sum REPOS.json)
+                    CHECKSUM2=$(openssl dgst -sha256 REPOS.json | cut -d ' ' -f2)
                     echo "REPOS.json checksum: $CHECKSUM"                  
                   else:
                     CHECKSUM2=""
@@ -59,7 +53,7 @@ jobs:
                     echo "No changes detected. Exiting..."
                     exit 0                
                   fi
-                
+            
             - name: Commit and push changes
               run: |
                 git config --global user.name "GitHub Actions"
