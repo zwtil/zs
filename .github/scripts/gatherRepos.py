@@ -3,6 +3,12 @@ import sys
 #import json
 
 def custom_match(repo):
+    if repo["visibility"] != "public":
+        return False
+    
+    if repo["name"].startswith("zuu"):
+        return False
+
     return True
 
 def get_repos(api_url):
@@ -46,7 +52,7 @@ def main():
 
     # Print repository information
     for repo in repos:
-        if repo:
+        if not repo:
             continue
 
         output.append({
