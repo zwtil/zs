@@ -1,0 +1,2 @@
+# zs
+ shell app
