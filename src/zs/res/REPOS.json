@@ -20,7 +20,23 @@
         "description": "Zack's Useful Utils for Vision and Automation",
         "url": "https://github.com/zwtil/zuu_va",
         "click": false,
-        "isPython": false,
+        "isPython": true,
         "giturl": "https://github.com/zwtil/zuu_va.git"
+    },
+    {
+        "name": "zuu_alpha",
+        "description": "immature zuu variants",
+        "url": "https://github.com/zwtil/zuu_alpha",
+        "click": false,
+        "isPython": false,
+        "giturl": "https://github.com/zwtil/zuu_alpha.git"
+    },
+    {
+        "name": "gists",
+        "description": null,
+        "url": "https://github.com/zwtil/gists",
+        "click": false,
+        "isPython": true,
+        "giturl": "https://github.com/zwtil/gists.git"
     }
 ]
