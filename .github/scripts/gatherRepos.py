@@ -18,6 +18,7 @@ def custom_match(repo):
         "url" : repo["html_url"],
         "click" : False,
         "isPython" :  repo["language"] == "Python",
+        "giturl" : repo["clone_url"],
     }
 
     if repo["name"].startswith("zuu"):
