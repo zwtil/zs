@@ -32,7 +32,7 @@ def custom_match(repo):
         return repoc
 
     contents = response.json()
-    if contents["status"] == "404":
+    if contents["status"] != "404":
         repoc["click"] = True
 
     return repoc
