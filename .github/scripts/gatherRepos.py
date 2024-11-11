@@ -60,11 +60,12 @@ def get_repos(api_url):
     return repos
 
 def main():
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("Usage: python script.py <github_org_or_user>")
         sys.exit(1)
     
     api_url = sys.argv[1]
+    save_path = sys.argv[2]
     print(api_url)
 
     repos = get_repos(api_url)
@@ -82,7 +83,7 @@ def main():
         }
         )
     
-    with open(".github/data/REPOS.json", "w") as f:
+    with open(save_path, "w") as f:
         json.dump(output, f, indent=4)
 
 if __name__ == "__main__":

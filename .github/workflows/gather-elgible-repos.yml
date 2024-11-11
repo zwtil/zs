@@ -6,6 +6,7 @@ on:
         - cron: "0 0 * * *" # Run daily at midnight UTC
 env:
     IS_ORG: true
+    EXPORT_PATH : "src/zs/res/REPOS.json"
 
 jobs:
     gather-repos:
@@ -28,8 +29,8 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
-                  if [ -f "REPOS.json" ]; then
-                    CHECKSUM=$(sha256sum REPOS.json)
+                  if [ -f "$EXPORT_PATH" ]; then                    
+                    CHECKSUM=$(sha256sum $EXPORT_PATH)
                     echo "REPOS.json checksum: $CHECKSUM"                  
                   else
                     CHECKSUM=""
@@ -40,10 +41,10 @@ jobs:
                   else
                       REPO_URL="https://api.github.com/users/${{ github.repository_owner }}/repos"
                   fi
-                  python .github/scripts/gatherRepos.py "$REPO_URL"
+                  python .github/scripts/gatherRepos.py "$REPO_URL" "$EXPORT_PATH"
 
-                  if [ -f "REPOS.json" ]; then
-                    CHECKSUM2=$(sha256sum REPOS.json)
+                  if [ -f "$EXPORT_PATH" ]; then                    
+                    CHECKSUM2=$(sha256sum $EXPORT_PATH)
                     echo "REPOS.json checksum: $CHECKSUM"                  
                   else
                     CHECKSUM2=""
