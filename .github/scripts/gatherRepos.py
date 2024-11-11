@@ -8,6 +8,9 @@ def custom_match(repo):
 
     if repo["archived"]:
         return None
+    
+    if repo["name"] == "zs":
+        return None
 
     repoc = {
         "name" : repo["name"],
@@ -20,9 +23,6 @@ def custom_match(repo):
     if repo["name"].startswith("zuu"):
         return repoc
     
-    if repo["name"] == "zs":
-        return repoc
-
     #query contents 
     contents_url = repo["contents_url"].replace("{+path}", "CLICK")
     response = requests.get(contents_url)
