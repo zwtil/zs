@@ -1,66 +1,30 @@
 [
     {
-        "name": "webworkStats",
-        "description": "webwork parser",
-        "url": "https://github.com/zwtil/webworkStats",
-        "click": false,
-        "isPython": true,
-        "archived": true
-    },
-    {
-        "name": "png-zip",
-        "description": null,
-        "url": "https://github.com/zwtil/png-zip",
-        "click": false,
-        "isPython": true,
-        "archived": true
-    },
-    {
-        "name": "zuu-predecessor1",
-        "description": "a more stable zack's reusable common library",
-        "url": "https://github.com/zwtil/zuu-predecessor1",
-        "click": false,
-        "isPython": true,
-        "archived": true
-    },
-    {
-        "name": "zuu-pre3.0",
-        "description": "zack's useful utilities",
-        "url": "https://github.com/zwtil/zuu-pre3.0",
-        "click": false,
-        "isPython": true,
-        "archived": true
-    },
-    {
         "name": "zuu",
         "description": "Zack's Useful Utilities V3 and onwards",
         "url": "https://github.com/zwtil/zuu",
         "click": false,
-        "isPython": true,
-        "archived": false
+        "isPython": true
     },
     {
         "name": "zuu_cli",
         "description": "Zack's Useful Utilities for Cli",
         "url": "https://github.com/zwtil/zuu_cli",
         "click": false,
-        "isPython": false,
-        "archived": false
+        "isPython": false
     },
     {
         "name": "zuu_va",
         "description": "Zack's Useful Utils for Vision and Automation",
         "url": "https://github.com/zwtil/zuu_va",
         "click": false,
-        "isPython": false,
-        "archived": false
+        "isPython": false
     },
     {
         "name": "zs",
         "description": "shell app",
         "url": "https://github.com/zwtil/zs",
         "click": false,
-        "isPython": true,
-        "archived": false
+        "isPython": true
     }
 ]
