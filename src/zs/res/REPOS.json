@@ -19,12 +19,5 @@
         "url": "https://github.com/zwtil/zuu_va",
         "click": false,
         "isPython": false
-    },
-    {
-        "name": "zs",
-        "description": "shell app",
-        "url": "https://github.com/zwtil/zs",
-        "click": false,
-        "isPython": true
     }
 ]
