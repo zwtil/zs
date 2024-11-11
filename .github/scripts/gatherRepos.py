@@ -4,33 +4,38 @@ import sys
 
 def custom_match(repo):
     if repo["visibility"] != "public":
-        return False
-    
+        return None
+
+    repoc = {
+        "name" : repo["name"],
+        "description" : repo["description"],
+        "url" : repo["html_url"],
+        "click" : False,
+        "isPython" :  repo["language"] == "Python",
+        "archived" :  repo["archived"]
+    }
+
     if repo["name"].startswith("zuu"):
-        return False
+        return repoc
     
     if repo["name"] == "zs":
-        return False
+        return repoc
 
-    # if archived
     if repo["archived"]:
-        return False
-
-    if not repo["language"] == "Python":
-        return False
+        return  repoc
 
     #query contents 
     contents_url = repo["contents_url"].replace("{+path}", "CLICK")
     response = requests.get(contents_url)
+
     if response.status_code != 200:
-        print(f"Error fetching contents: {response.status_code}")
-        return False
+        return repoc
 
     contents = response.json()
     if contents["status"] == "404":
-        return False
+        repoc["click"] = True
 
-    return True
+    return repoc
 
 def get_repos(api_url):
 
@@ -74,14 +79,10 @@ def main():
 
     # Print repository information
     for repo in repos:
-        if not custom_match(repo):
+        res = custom_match(repo)
+        if res is None:
             continue
-
-        output.append({
-            "name": repo['name'],
-            "url": repo['html_url'],
-        }
-        )
+        output.append(res)
     
     with open(save_path, "w") as f:
         json.dump(output, f, indent=4)
