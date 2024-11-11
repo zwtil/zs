@@ -8,7 +8,7 @@ def custom_match(repo):
 
     if repo["archived"]:
         return None
-    
+
     if repo["name"] == "zs":
         return None
 
@@ -21,9 +21,9 @@ def custom_match(repo):
         "giturl" : repo["clone_url"],
     }
 
-    if repo["name"].startswith("zuu"):
+    if repo["name"].startswith("z"):
         return repoc
-    
+
     #query contents 
     contents_url = repo["contents_url"].replace("{+path}", "CLICK")
     response = requests.get(contents_url)
@@ -32,7 +32,9 @@ def custom_match(repo):
         return repoc
 
     contents = response.json()
-    if contents["status"] != "404":
+    try:
+        assert contents["status"] == "404"
+    except: #noqa
         repoc["click"] = True
 
     return repoc
