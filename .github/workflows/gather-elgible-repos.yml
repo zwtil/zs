@@ -4,6 +4,13 @@ on:
     workflow_dispatch:
     schedule:
         - cron: "0 0 * * *" # Run daily at midnight UTC
+    # updates on this yml file and .github/scripts change
+    push:
+      branches:
+        - main
+      paths:
+        - .github/workflows/gather-elgible-repos.yml
+        - .github/scripts/gather-repos.py
 env:
     IS_ORG: true
     EXPORT_PATH : "src/zs/res/REPOS.json"

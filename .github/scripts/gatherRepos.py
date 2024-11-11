@@ -6,13 +6,15 @@ def custom_match(repo):
     if repo["visibility"] != "public":
         return None
 
+    if repo["archived"]:
+        return None
+
     repoc = {
         "name" : repo["name"],
         "description" : repo["description"],
         "url" : repo["html_url"],
         "click" : False,
         "isPython" :  repo["language"] == "Python",
-        "archived" :  repo["archived"]
     }
 
     if repo["name"].startswith("zuu"):
@@ -20,9 +22,6 @@ def custom_match(repo):
     
     if repo["name"] == "zs":
         return repoc
-
-    if repo["archived"]:
-        return  repoc
 
     #query contents 
     contents_url = repo["contents_url"].replace("{+path}", "CLICK")
