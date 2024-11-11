@@ -38,5 +38,13 @@
         "click": false,
         "isPython": true,
         "giturl": "https://github.com/zwtil/gists.git"
+    },
+    {
+        "name": "coord-1",
+        "description": null,
+        "url": "https://github.com/zwtil/coord-1",
+        "click": true,
+        "isPython": true,
+        "giturl": "https://github.com/zwtil/coord-1.git"
     }
 ]
