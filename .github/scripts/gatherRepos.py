@@ -140,7 +140,7 @@ def main():
     
     last_updated = datetime.datetime.strptime(jdata.get("last_updated", "1970-01-01T00:00:00Z"), "%Y-%m-%dT%H:%M:%SZ")
 
-    repodata = get_matching_repos(api_url, repodata, last_updated)
+    get_matching_repos(api_url, repodata, last_updated)
     
     with open(save_path, "w") as f:
         json.dump({
