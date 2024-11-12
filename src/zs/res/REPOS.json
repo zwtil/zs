@@ -1,4 +1,17 @@
 {
-    "last_updated": "2024-11-12T02:31:50Z",
-    "repos": {}
+    "last_updated": "2024-11-12T02:33:24Z",
+    "repos": {
+        "gists": {
+            "name": "gists",
+            "url": "https://github.com/zwtil/gists.git",
+            "_html": "https://github.com/zwtil/gists"
+        },
+        "coord-1": {
+            "name": "coord-1",
+            "url": "https://github.com/zwtil/coord-1.git",
+            "_html": "https://github.com/zwtil/coord-1",
+            "click": "cli.py",
+            "req": "requirements.txt"
+        }
+    }
 }
