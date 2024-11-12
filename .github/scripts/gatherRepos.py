@@ -52,12 +52,17 @@ def analyse_repo(repo : dict, repoInData : dict):
     if not has_src:
         return
 
-    src_contents_res = requests.get(contents_url.replace("{+path}", f"src/{repo['name']}"))
-    src_contents :dict | list = src_contents_res.json()
+    root_src_contents_res = requests.get(contents_url.replace("{+path}", "src"))
+    root_src_contents :dict | list = root_src_contents_res.json()
 
-    if isinstance(src_contents, dict):
+    if isinstance(root_src_contents, dict):
         return
     
+    src_contents_res = requests.get(contents_url.replace("{+path}", root_src_contents[0]["path"]))
+    src_contents :dict | list = src_contents_res.json()
+    if isinstance(src_contents, dict):
+        return
+
     for file in src_contents:
         if file["name"] == "cli.py":
             repoInData["click"] = f"src/{repo['name']}/cli.py"
