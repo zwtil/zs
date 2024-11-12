@@ -3,6 +3,7 @@ import json
 import os
 import requests
 import sys
+from hashlib import sha256
 
 EXCLUDED_REPOS = ["zs"]
 def CUSTOM_FILTER(repo):
@@ -137,11 +138,18 @@ def main():
         jdata = {}
 
     repodata = jdata.get("repos", {})
+    prev_sha256 = sha256(json.dumps(repodata).encode()).hexdigest()
     
     last_updated = datetime.datetime.strptime(jdata.get("last_updated", "1970-01-01T00:00:00Z"), "%Y-%m-%dT%H:%M:%SZ")
 
     get_matching_repos(api_url, repodata, last_updated)
     
+    curr_sha256 = sha256(json.dumps(repodata).encode()).hexdigest()
+
+    if prev_sha256 == curr_sha256:
+        print("No changes detected.")
+        return
+
     with open(save_path, "w") as f:
         json.dump({
             "last_updated" : datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%SZ"),
