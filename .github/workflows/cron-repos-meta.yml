@@ -3,7 +3,7 @@ name: Gather Eligible Repos
 on:
     workflow_dispatch:
     schedule:
-        - cron: "0 0 */3 * *" # Run every 3 days at midnight UTC    
+        - cron: "0 0 * * *" # every day at 00:00 UTC
     push: # updates on this yml file and .github/scripts change
       branches:
         - main
