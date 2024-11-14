@@ -1,5 +1,5 @@
 {
-    "last_updated": "2024-11-12T02:33:24Z",
+    "last_updated": "2024-11-14T01:39:09Z",
     "repos": {
         "gists": {
             "name": "gists",
@@ -12,6 +12,11 @@
             "_html": "https://github.com/zwtil/coord-1",
             "click": "cli.py",
             "req": "requirements.txt"
+        },
+        "generate-pdf-resume": {
+            "name": "generate-pdf-resume",
+            "url": "https://github.com/zwtil/generate-pdf-resume.git",
+            "_html": "https://github.com/zwtil/generate-pdf-resume"
         }
     }
 }
