@@ -1,0 +1,2 @@
+# zs
+ personal shell app
