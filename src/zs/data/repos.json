@@ -1,0 +1,14 @@
+[
+    {
+      "name": "zwtil/coord-1",
+      "url": "https://github.com/zwtil/coord-1",
+      "description": null,
+      "method": "ROOT_CLI"
+    },
+    {
+      "name": "zwtil/generate-pdf-resume",
+      "url": "https://github.com/zwtil/generate-pdf-resume",
+      "description": null,
+      "method": "SRC"
+    }
+]

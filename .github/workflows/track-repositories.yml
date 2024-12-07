@@ -1,0 +1,164 @@
+name: Track Repositories
+
+on:
+  schedule:
+    - cron: '0 0 */2 * *'  # Runs every 48 hours
+  workflow_dispatch:        # Allows manual triggering
+
+jobs:
+  track-repos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Read configuration
+        id: read-config
+        run: |
+          CONFIG_FILE=".github/cfg/links.json"
+          if [ ! -f "$CONFIG_FILE" ]; then
+            echo "Error: Configuration file not found at $CONFIG_FILE"
+            exit 1
+          fi
+          # Ensure the JSON is minified to avoid multiline issues
+          echo "config=$(cat $CONFIG_FILE | jq -c '.')" >> $GITHUB_OUTPUT
+
+      - name: Process organizations
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFIG_CONTENT: ${{ steps.read-config.outputs.config }}
+        run: |
+          echo "Processing organizations from config:"
+          echo "$CONFIG_CONTENT" | jq -r '.[]'
+
+          # Install required packages
+          pip install requests PyGithub
+
+          # Process repositories using GitHub API
+          python3 << 'EOF'
+          import json
+          import os
+          from github import Github
+          
+          # Initialize GitHub client with token
+          g = Github(os.environ['GITHUB_TOKEN'])
+          
+          def check_repository(repo):
+              try:
+                  # Skip archived repositories
+                  if repo.archived:
+                      print(f"Skipping archived repository: {repo.full_name}")
+                      return False
+                      
+                  # Check for src/zwtil folder
+                  try:
+                      repo.get_contents('src/zwtil')
+                      return True
+                  except:
+                      pass
+                  
+                  # Check for cli.py at root
+                  try:
+                      repo.get_contents('cli.py')
+                      return True
+                  except:
+                      pass
+                  
+                  return False
+              except Exception as e:
+                  print(f"Error checking repository {repo.full_name}: {str(e)}")
+                  return False
+          
+          # Parse config content from environment variable
+          config = json.loads(os.environ['CONFIG_CONTENT'])
+          
+          # Load cache if it exists
+          cache_file = '.github/data/cacheRepos.json'
+          cached_repos = set()
+          if os.path.exists(cache_file):
+              with open(cache_file, 'r') as f:
+                  cached_repos = set(json.load(f))
+          
+          # Load existing eligible repos if file exists
+          results_file = '.github/data/repositories.json'
+          existing_eligible_repos = []
+          if os.path.exists(results_file):
+              with open(results_file, 'r') as f:
+                  existing_eligible_repos = json.load(f)
+          
+          # Convert existing repos to a dictionary for easier lookup and updates
+          existing_repos_dict = {repo['name']: repo for repo in existing_eligible_repos}
+          
+          for target in config:
+              try:
+                  target_type = target['type']
+                  target_name = target['name']
+                  
+                  if '/' in target_name:
+                      # Organization repository
+                      org = g.get_organization(target_name.split('/')[0])
+                      repos = org.get_repos()
+                  else:
+                      if target_type == 'org':
+                          # Organization
+                          org = g.get_organization(target_name)
+                          repos = org.get_repos()
+                      else:
+                          # User repository
+                          user = g.get_user(target_name)
+                          repos = user.get_repos()
+                  
+                  print(f"Checking repositories for {target_name}")
+                  for repo in repos:
+                      if repo.full_name in cached_repos:
+                          print(f"Skipping cached repository: {repo.full_name}")
+                          continue
+                          
+                      if check_repository(repo):
+                          repo_info = {
+                              "name": repo.full_name,
+                              "url": repo.html_url,
+                              "description": repo.description,
+                              "method": "ROOT_CLI" if os.path.exists(os.path.join(repo.full_name, "cli.py")) else "SRC"
+                          }
+                          existing_repos_dict[repo.full_name] = repo_info
+                          print(f"Found eligible repository: {repo.full_name}")
+              
+              except Exception as e:
+                  print(f"Error processing {target_name}: {str(e)}")
+                  continue
+          
+          # Convert back to list for saving
+          eligible_repos = list(existing_repos_dict.values())
+          
+          print("\nEligible repositories found:")
+          for repo in eligible_repos:
+              print(f"- {repo['name']}")
+          
+          # Update cache with all repo names
+          cached_repos.update([repo['name'] for repo in eligible_repos])
+          os.makedirs(os.path.dirname(cache_file), exist_ok=True)
+          os.makedirs(os.path.dirname(results_file), exist_ok=True)
+          
+          # Save cache
+          with open(cache_file, 'w') as f:
+              json.dump(list(cached_repos), f, indent=2)
+          
+          # Save merged results to JSON file
+          with open(results_file, 'w') as f:
+              json.dump(eligible_repos, f, indent=2)
+          EOF
+
+      - name: Copy to src directory
+        run: |
+          mkdir -p src/zs/data
+          cp .github/data/repositories.json src/zs/data/repos.json || echo "No repositories found"
+
+      - name: Commit changes
+        run: |
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git add .github/data/cacheRepos.json .github/data/repositories.json src/zs/data/repos.json || true
+            git diff --staged --quiet || git commit -m "Update repository data [skip ci]"
+            git push
+            
